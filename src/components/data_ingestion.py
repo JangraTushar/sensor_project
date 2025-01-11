@@ -2,13 +2,13 @@ import sys
 import os
 import pandas as pd
 import numpy as np
-from pymongo import MongoClient # type: ignore
+from pymongo import MongoClient
 from zipfile import Path
-from src.constants import * # type: ignore
+from src.constant import *
 from src.exception import CustomException
 from src.logger import logging
-from src.utils.main.utils import Mainutils # type: ignore
-from dataclass import dataclass # type: ignore
+from src.utils.main_utils import Mainutils
+from dataclasses import dataclass
 
 
 @dataclass
@@ -22,7 +22,7 @@ class DataIngestion:
     def export_collection_as_dataframe(self,collection_name,db_name):
 
         try:
-            mongo_client = MongoClient(MONGO_DB_URL) # type: ignore
+            mongo_client = MongoClient(MONGO_DB_URL)
 
             collection = mongo_client[db_name][collection_name]
 
@@ -37,18 +37,18 @@ class DataIngestion:
         except Exception as e:
             raise CustomException(e,sys)
         
-    def export_data_into_feature_store_file_path(self) -> pd.DataFrame: # type: ignore
+    def export_data_into_feature_store_file_path(self) -> pd.DataFrame:
 
         try:
         
             logging.info(f"exporting data from mongodb")
-            raw_file_path = self.data_ingestion_config.artifact_folder # type: ignore
+            raw_file_path = self.data_ingestion_config.artifact_folder
 
             os.makedirs(raw_file_path,exist_ok=True)
 
-            sensor_data = self.export_collection_as_dataframe( # type: ignore
-                collection_name=MONNGO_COLLECTION_NAME, # type: ignore
-                db_name=MONGO_DATABSE_NAME # type: ignore
+            sensor_data = self.export_collection_as_dataframe(
+                collection_name=MONNGO_COLLECTION_NAME,
+                db_name=MONGO_DATABSE_NAME
             )
 
             logging.info(f"saving exported data into feature stored file path : {raw_file_path}")
@@ -67,7 +67,7 @@ class DataIngestion:
         logging.info("Entered the initiate_data_ingestion method of DataIngestion class")
 
         try:
-            feature_stored_file_path = self.export_data_into_feature_store_file_path() # type: ignore
+            feature_stored_file_path = self.export_data_into_feature_store_file_path()
 
             logging.info("got the data from mongodb")
 
