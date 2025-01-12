@@ -7,7 +7,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import RobustScaler, FunctionTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
 from src.constant import *
 from src.exception import CustomException
 from src.logger import logging
@@ -32,22 +31,20 @@ class DataTransformation:
         self.utils = MainUtils()
 
     @staticmethod
-    def get_data(feature_store_file_path: str) ->pd.DataFrame:
+    def get_data(feature_store_file_path:str) -> pd.DataFrame:
 
         try:
-
             data = pd.read_csv(feature_store_file_path)
-
             data.rename(columns={"Good/Bad": TARGET_COLUMN}, inplace=True)
-
             return data
+        
         except Exception as e:
             raise CustomException(e,sys)
         
+
     def get_data_transformer_object(self):
 
         try:
-
             imputer_step = ('imputer',SimpleImputer(strategy='constant', fill_value=0))
             scaler_step = ('scaler',RobustScaler())
 
@@ -57,11 +54,12 @@ class DataTransformation:
                     scaler_step
                 ]
             )
-
             return preprocessor
+        
         except Exception as e:
             raise CustomException(e,sys)
     
+
     def initiate_data_transformation(self):
 
         logging.info("Entered initiate data transformation method of data transfomration class")
@@ -91,5 +89,3 @@ class DataTransformation:
         
         except Exception as e:
             raise CustomException(e,sys) from e
-
-    
